@@ -1,0 +1,42 @@
+# Test
+
+## Welcome to GitBook MDX
+
+This is a **Markdown + JSX (MDX)** file that works in GitBook when synced with a Git repository.
+
+### Standard Markdown
+
+* Bullet points
+* Work as usual
+* With GitBook
+
+### Adding JSX Components
+
+import { Button } from '@components/Button';
+
+Click Me
+
+### Embedding Code
+
+```js
+console.log("Hello, GitBook MDX!");
+```
+
+### Blockquotes
+
+> This is a quote block
+
+### Images
+
+![GitBook Logo](https://example.com/logo.png)
+
+### Tables
+
+| Feature  | Supported        |
+| -------- | ---------------- |
+| Markdown | ✅                |
+| JSX      | ✅ (if supported) |
+
+### Conclusion
+
+This MDX file demonstrates how you can mix **Markdown and JSX** in GitBook. 🎉
