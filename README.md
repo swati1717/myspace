@@ -5,30 +5,29 @@ This document provides steps to add pages to OMS that do not show on the menu bu
 
 For example, the Shopify Solr Search page is useful for verifying updates through GraphQL and debugging API request errors. Since this page is not directly visible in OMS, we will add it under the relevant section in the hamburger menu.
 
-## Note
+{% hint style="Info" %}
 - Please verify that the user has the necessary [permissions](https://docs.hotwax.co/documents/system-admins/administration/introduction/users-app#permissions-tab) to access the page.
 - Additionally, check if a "thru date" is set on the `content assoc` or `security group permissions` entity, as this could be preventing the page from being visible in OMS.
 - If a "thru date" is applied, the permission will expire once the date is reached. To resolve this, remove the "thru date" from the `content association` or `security group permissions`.
-- If the page is still not visible after removing the "thru date," please ensure that all the below-required data is present in the database.
+- If the page is still not visible after removing the "thru date," please ensure that all the below-required data is present in the database.{% endhint %}
 
 Creating any page requires a data resource, content, content association, and permission to view the page. Lastly, it involves a security permissions group where we can define which group can view its page.
 
-Perform these steps in your local/test/dev instance first before applying changes to a client instance.
+{% hint style="warning" %} Perform these steps in your local/test/dev instance first before applying changes to a client instance.{% endhint %}
 
 ---
 
 ## Steps to Add a Non-Existent Page in OMS
 
 ### Step 1: Verify Data Availability
-Check if the page data is present in the appropriate file:
 
-- Ensure you have access to the git repository: Hotwax OMS Git Repository
-- **Shopify-related pages:** `ShopifyData.xml`
-- **Other pages:** `HamburgerData.xml`
+Please make sure that you have access to this [git repository](https://git.hotwax.co/commerce/oms): 
 
-🔗 **Reference Files:**
-- `ShopifyData.xml`
-- `HamburgerMenusData.xml`
+Check if the page data is present in the Below files:
+
+🔗 **Reference files:**
+- [`ShopifyData.xml`](https://git.hotwax.co/commerce/oms/-/blob/develop/applications/shopify-connector/data/ShopifyData.xml)
+- [`HamburgerMenusData.xml`](https://git.hotwax.co/commerce/oms/-/blob/develop/applications/hwmapps/data/commerce/HamburgerMenusData.xml)
 
 Ensure that the required `objectInfo` exists in these files, as it specifies the location of external content.
 
@@ -43,7 +42,7 @@ The **Data Resource** entity stores actual content data (text, URLs, binary file
 - `dataResourceId` → Unique identifier for the data.
 - `dataResourceTypeId` → Type of data (e.g., electronic text, link, image).
 - `dataTemplateTypeId` → Template format (optional).
-- `objectInfo` → Defines the location of external content, such as a URL pointing to an image or document.
+- `objectInfo` → ObjectInfo is a parameter that defines the location of external content, such as a URL pointing to an image or document. If this information is missing, the page may not be rendered correctly.
 
 ```xml
 <DataResource dataResourceId="SHOPIFY_SOLR_SRCH"
@@ -53,7 +52,7 @@ The **Data Resource** entity stores actual content data (text, URLs, binary file
 ```
 
 #### Create Content and Link to Menu
-Defines relationships between different content items (e.g., linking an image to an article).
+Defines relationships between different content items (e.g., linking a data resources to an article).
 
 **Key Fields:**
 - `contentId` → Unique identifier for content.
@@ -81,7 +80,7 @@ A **Content Association** defines relationships between content items, such as l
 - `contentAssocTypeId` → Type of relationship (e.g., "includes", "related to").
 - `fromDate`, `thruDate` → Validity period of the association.
 
-📌 **Note:** We have multiple menus; ensure you add your page to the correct menu. In this example, we are adding Shopify Solr Search to the Shopify menu.
+{% hint style="info" %}We have multiple menus; ensure you add your page to the correct menu. In this example, we are adding Shopify Solr Search to the Shopify menu.{% endhint %}
 
 ```xml
 <ContentAssoc contentId="SHOPIFY_MENU"
@@ -92,12 +91,10 @@ A **Content Association** defines relationships between content items, such as l
               sequenceNum="00"/>
 ```
 
-✅ **Ensure the referenced screen exists for the page you are adding.**
-
 ### Step 3: Define Permissions
 
 #### Create a Security Permission
-Security permissions control who can view or interact with the page. If permissions are not added, users will not be able to see the page, even if it exists in the menu.
+Security permissions control who can view or interact with the page. If permissions are not added, users will not be able to see the page, even if it menu data exists in the OMS.
 
 ```xml
 <SecurityPermission description="View Shopify Solr Search Page"
@@ -119,8 +116,11 @@ Security permissions control who can view or interact with the page. If permissi
 ## Verification
 After completing these steps, confirm that the page appears in OMS.
 
-If the page is not visible, review `objectInfo` and security permissions.
+### Troubleshooting
+If the page is still not visible:
 
-### Notes:
-- This SOP applies to pages with valid URLs but no physical presence in OMS.
-- If issues arise, consult a senior developer or engineer at HotWax Commerce.
+- Review the objectInfo field to ensure correct configuration.
+- Check security permissions.
+- Ensure the associated screen exists in OMS.
+
+If issues persist, consult a senior developer or engineer at HotWax Commerce.
